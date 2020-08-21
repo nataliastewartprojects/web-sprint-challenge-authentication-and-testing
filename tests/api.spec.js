@@ -1,5 +1,7 @@
 const db = require("../database/dbConfig");
 const Users = require("../users/users-model");
+const request = require("supertest");
+const server = require("../api/server");
 // const Auth = require("../auth-routerauth/");
 
 describe("usersModel", () => {
@@ -15,7 +17,7 @@ describe("usersModel", () => {
 
       // make request, send data
       await Users.add({
-        username: "userOne",
+        username: "userThree", //we have to change the username evrytime before run the test
         password: "secret",
       });
 
@@ -23,6 +25,20 @@ describe("usersModel", () => {
       const users = await db("users");
 
       expect(users).toHaveLength(1);
+    });
+  });
+
+  describe("GET /Jokes", () => {
+    it("should GET jokes", async () => {
+      // truncate the table to make sure it's empty
+      // happens in the beforeEach() global
+
+      // make request, send data
+      const res = await request(server).get("/jokes");
+
+      // check the jokes is in the database (without using the GET / route)
+
+      expect(res.status).toBe(404);
     });
   });
 });
